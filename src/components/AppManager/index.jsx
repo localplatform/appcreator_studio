@@ -4,7 +4,9 @@ import './index.scss'
 export default function AppManager(appId, setSelectedAppId) {
 
     const createApp = async () => {
-        const data = fetchData('post', 'createproject')
+        console.log('Creating app...')
+        const data = await fetchData('post', 'createproject')
+        console.log(data)
     }
 
     return (
