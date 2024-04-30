@@ -1,5 +1,4 @@
 import { useState } from 'react'
-import useRequest from './useRequest'
 import './App.scss'
 
 import AppManager from './components/AppManager'

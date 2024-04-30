@@ -1,3 +1,5 @@
+import axios from 'axios'
+
 export default async function fetchData(method, endpoint, body) {
     try {
         const response = await axios.request({
