@@ -11,7 +11,7 @@ export default function useRequest(auto, method, endpoint) {
         try {
             const response = await axios.request({
                 method: method,
-                URL: `http://localhost:3000/api/${endpoint}`,
+                url: `http://localhost:3000/api/${endpoint}`,
                 // url: `${process.env.REACT_APP_API_URL}/api/public/${endpoint}`,
                 headers: { 'Accept': 'application/json' }
             })

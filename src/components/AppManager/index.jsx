@@ -1,11 +1,10 @@
-import useRequest from '../../useRequest'
+import fetchData from '../../services/fetchData'
 import './index.scss'
 
 export default function AppManager(appId, setSelectedAppId) {
-    const { data, isLoading, error, fetchData } = useRequest(`newapp`)
 
     const createApp = async () => {
-        
+        const data = fetchData('post', 'createproject')
     }
 
     return (
