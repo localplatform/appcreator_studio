@@ -11,9 +11,11 @@ export default function AppManager(appId, setSelectedAppId) {
 
     return (
         <div className='app_manager_container'>
-            <div className='header'>
-                <h1>SELECT AN APP</h1>
-                <button onClick={createApp}>NEW APP</button>
+            <div className="scrollable_screen">
+                <div className='header'>
+                    <h1>SELECT AN APP</h1>
+                    <button onClick={createApp}>NEW APP</button>
+                </div>
             </div>
         </div>
     )
