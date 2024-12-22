@@ -1,11 +1,94 @@
-.tree-node {
-    margin-bottom: 4px;
-}
+/* TreePanel.scss */
 
-.tree-item {
-    cursor: pointer;
-
-    &.selected {
-        font-weight: bold;
+/* Panel de gauche */
+.studio-left-panel {
+    padding: 8px;
+    background: #f9f9f9;
+    border-right: 1px solid #ccc;
+    overflow-y: auto;
+  }
+  
+  /* Pages */
+  .page-item {
+    margin-bottom: 16px;
+    padding: 8px;
+    border-radius: 4px;
+    background-color: #e0e0e0; /* Fond gris clair pour les pages non sélectionnées */
+    color: #555; /* Police gris moyen pour les pages non sélectionnées */
+    transition: background-color 0.3s, color 0.3s;
+  
+    &.selected-page {
+      background-color: #0078d4; /* Fond bleu pour la page sélectionnée */
+      color: #fff; /* Texte blanc lisible */
     }
-}
+  
+    &:hover {
+      background-color: #d0d0d0; /* Fond légèrement plus foncé au survol */
+      cursor: pointer;
+    }
+  }
+  
+  /* Nom de la page */
+  .page-header {
+    display: flex;
+    justify-content: space-between; /* Sépare le nom et le bouton supprimer */
+    align-items: center;
+    padding: 8px;
+    font-weight: normal; /* Police normale pour les pages non sélectionnées */
+    cursor: pointer;
+  
+    .page-name {
+      flex: 1;
+      margin-right: 8px;
+      color: inherit; /* Hérite de la couleur selon sélection/survol */
+    }
+  
+    .delete-btn {
+      display: none; /* Masqué par défaut */
+      padding: 4px 8px;
+      border: 1px solid #ccc;
+      background-color: #f9f9f9;
+      border-radius: 4px;
+      color: #000;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+  
+    &:hover .delete-btn {
+      display: inline-block; /* Affiche le bouton au survol */
+    }
+  
+    .delete-btn:hover {
+      background-color: #e5e5e5;
+    }
+  }
+  
+  /* Arborescence */
+  .tree-container {
+    padding-left: 16px; /* Décalage pour l'arborescence */
+  }
+  
+  .tree-item {
+    padding: 4px 8px;
+    border-radius: 4px;
+    margin-bottom: 4px;
+    cursor: pointer;
+    background-color: #fff; /* Fond blanc par défaut */
+    transition: background-color 0.3s, color 0.3s;
+  
+    &.selected {
+      background-color: #d4e1f7; /* Fond bleu clair pour l'élément sélectionné */
+      font-weight: bold;
+      color: #000; /* Texte noir pour une meilleure lisibilité */
+    }
+  
+    &:hover {
+      background-color: #e6f2ff; /* Fond légèrement plus clair au survol */
+      color: #000; /* Texte toujours noir pour la lisibilité */
+    }
+  
+    &:not(.selected) {
+      color: #555; /* Police gris moyen pour les éléments non sélectionnés */
+    }
+  }
+  

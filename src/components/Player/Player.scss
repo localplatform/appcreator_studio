@@ -1,41 +1,50 @@
 .player-root {
-    width: 100%;
-    height: 100%;
-    /* Vous pouvez ajuster à votre convenance */
+  width: 100%;
+  height: 100%;
+  overflow: auto; /* Permet uniquement le scroll interne au Player */
+  display: flex; /* Assure un comportement adaptatif */
+  flex-direction: column; /* Adapte la direction des enfants */
+  background-color: #f9f9f9; /* Fond par défaut */
+  box-sizing: border-box;
+  padding: 8px; /* Ajoute un peu d'espace autour */
+}
+
+.player-component {
+  cursor: pointer;
+
+  &:hover {
+    outline: 1px dashed #bbb;
   }
-  
-  .player-component {
-    /* Style commun à tous les composants (Container, Text, Button) */
-    cursor: pointer;
-  
-    /* Pour montrer le survol, par exemple */
-    &:hover {
-      outline: 1px dashed #bbb;
-    }
-  }
-  
-  .player-component.selected {
-    /* Style appliqué à un composant sélectionné */
+
+  &.selected {
     outline: 2px dashed blue;
-    outline-offset: -2px; /* petit ajustement de l'outline */
+    outline-offset: -2px;
   }
-  
-  .player-component.container {
-    /* Style par défaut d'un container (si vous voulez) */
-    display: block;
-    position: relative;
-  }
-  
-  .player-component.text {
-    display: inline-block;
-  }
-  
-  .player-component.button {
-    cursor: pointer;
-  }
-  
-  .unknown-type {
-    color: red;
-    font-weight: bold;
-  }
-  
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  width: 100%;
+  height: 100%; /* Occupe tout l'espace disponible */
+}
+
+.text {
+  display: inline-block;
+}
+
+.button {
+  cursor: pointer;
+}
+
+.unknown-type {
+  color: red;
+  font-weight: bold;
+}
+
+.player-error {
+  color: red;
+  text-align: center;
+  margin-top: 20px;
+}

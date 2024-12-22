@@ -4,52 +4,39 @@ import SettingsPanel from "./components/SettingsPanel";
 import TreePanel from "./components/TreePanel";
 import "./Studio.scss";
 
-const initialJSON = {
+const initialPage = {
   id: "root-container",
   type: "Container",
   props: {
     style: {
-      border: "1px solid #ccc",
-      padding: "16px",
+      display: "flex",
+      width: "100%",
+      height: "auto",
       backgroundColor: "#f9f9f9",
       minHeight: "200px",
     },
   },
-  children: [
-    {
-      id: "text-1",
-      type: "Text",
-      props: {
-        text: "Hello World !",
-        style: {
-          color: "blue",
-          fontSize: "16px",
-        },
-      },
-    },
-    {
-      id: "btn-1",
-      type: "Button",
-      props: {
-        label: "Click me!",
-        style: {
-          marginTop: "8px",
-        },
-      },
-    },
-  ],
+  children: [],
 };
 
 export default function App() {
-  const [appJSON, setAppJSON] = useState(initialJSON);
-
-  // ID du composant sélectionné
+  const [pages, setPages] = useState([{ id: "page-1", name: "Page 1", tree: initialPage }]);
+  const [currentPageId, setCurrentPageId] = useState("page-1");
   const [selectedId, setSelectedId] = useState(null);
-
-  // Type de composant qu'on veut ajouter
   const [newComponentType, setNewComponentType] = useState("Text");
 
-  // Trouve un node dans l'arbre
+  // Page actuelle
+  const currentPage = useMemo(() => pages.find((p) => p.id === currentPageId), [pages, currentPageId]);
+  const appJSON = currentPage?.tree;
+
+  // Mise à jour du JSON de la page actuelle
+  const updateCurrentPageTree = (newTree) => {
+    setPages((prev) =>
+      prev.map((p) => (p.id === currentPageId ? { ...p, tree: newTree } : p))
+    );
+  };
+
+  // Recherche d'un nœud dans l'arbre
   const findNodeById = (node, id) => {
     if (node.id === id) return node;
     if (!node.children) return null;
@@ -60,18 +47,18 @@ export default function App() {
     return null;
   };
 
-  // Sélection
+  // Gestion de la sélection d'un composant
   const handleSelectComponent = (id) => {
     setSelectedId(id);
   };
 
-  // Node sélectionné
+  // Nœud sélectionné
   const selectedNode = useMemo(() => {
     if (!selectedId) return null;
     return findNodeById(appJSON, selectedId);
   }, [appJSON, selectedId]);
 
-  // Met à jour les props
+  // Mise à jour des propriétés d'un composant
   const updateNodeProps = (nodeId, newProps) => {
     const updateRecursive = (node) => {
       if (node.id === nodeId) {
@@ -85,10 +72,10 @@ export default function App() {
       }
       return node;
     };
-    setAppJSON((prev) => updateRecursive(prev));
+    updateCurrentPageTree(updateRecursive(appJSON));
   };
 
-  // Ajouter un composant (avec display:flex par défaut)
+  // Ajouter un composant
   const addComponent = (parentId, newNode) => {
     const addRecursive = (node) => {
       if (node.id === parentId) {
@@ -106,10 +93,10 @@ export default function App() {
       }
       return node;
     };
-    setAppJSON((prev) => addRecursive(prev));
+    updateCurrentPageTree(addRecursive(appJSON));
   };
 
-  // Supprimer
+  // Supprimer un composant
   const removeComponent = (nodeId) => {
     const removeRecursive = (node) => {
       if (node.id === nodeId) {
@@ -123,30 +110,26 @@ export default function App() {
       }
       return node;
     };
-    setAppJSON((prev) => {
-      const updated = removeRecursive(prev);
-      return updated || prev;
-    });
+    const updatedTree = removeRecursive(appJSON);
+    updateCurrentPageTree(updatedTree || appJSON);
     if (selectedId === nodeId) {
       setSelectedId(null);
     }
   };
 
-  // Clic sur "Ajouter"
+  // Gestion de l'ajout de composants
   const handleAddClick = () => {
     const newId = `new-${Math.floor(Math.random() * 10000)}`;
-
     let newNode = {
       id: newId,
       type: newComponentType,
       props: {
         style: {
-          display: "flex", // par défaut
+          display: "flex",
         },
       },
     };
 
-    // Props supplémentaires selon le type
     switch (newComponentType) {
       case "Container":
         newNode.props.style.flexDirection = "row";
@@ -166,7 +149,6 @@ export default function App() {
         break;
     }
 
-    // L'ajouter sous le container sélectionné ou la racine
     let targetId = appJSON.id;
     if (selectedNode && selectedNode.type === "Container") {
       targetId = selectedNode.id;
@@ -175,9 +157,34 @@ export default function App() {
     addComponent(targetId, newNode);
   };
 
+  // Ajouter une nouvelle page
+  const addPage = () => {
+    const newPageId = `page-${pages.length + 1}`;
+    setPages([...pages, { id: newPageId, name: `Page ${pages.length + 1}`, tree: initialPage }]);
+    setCurrentPageId(newPageId);
+    setSelectedId(null);
+  };
+
+  // Supprimer une page
+  const removePage = (pageId) => {
+    if (pages.length > 1) {
+      setPages((prev) => prev.filter((p) => p.id !== pageId));
+      if (currentPageId === pageId) {
+        setCurrentPageId(pages[0].id);
+      }
+    }
+  };
+
+  // Renommer une page
+  const renamePage = (pageId, newName) => {
+    setPages((prev) =>
+      prev.map((p) => (p.id === pageId ? { ...p, name: newName } : p))
+    );
+  };
+
   return (
     <div className="studio-container">
-      {/* Barre du haut */}
+      {/* Barre supérieure */}
       <div className="studio-topbar">
         <label htmlFor="component-select">Type à ajouter :</label>
         <select
@@ -192,16 +199,20 @@ export default function App() {
         <button onClick={handleAddClick}>Ajouter</button>
       </div>
 
-      {/* Arbre de gauche */}
+      {/* Arborescence */}
       <TreePanel
-        appJSON={appJSON}
+        pages={pages}
+        currentPageId={currentPageId}
+        onSelectPage={setCurrentPageId}
+        onRenamePage={renamePage}
+        onRemovePage={removePage}
+        onAddPage={addPage}
         selectedId={selectedId}
         onSelectComponent={handleSelectComponent}
       />
 
-      {/* Player au centre */}
+      {/* Player */}
       <div className="studio-center-panel">
-        <h4>Aperçu</h4>
         <div className="studio-player-wrapper">
           <Player
             componentTree={appJSON}
@@ -211,7 +222,7 @@ export default function App() {
         </div>
       </div>
 
-      {/* Panneau de droite : Propriétés */}
+      {/* Panneau de droite */}
       <SettingsPanel
         selectedNode={selectedNode}
         updateNodeProps={updateNodeProps}
