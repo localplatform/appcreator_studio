@@ -23,7 +23,6 @@ export default function App() {
   const [pages, setPages] = useState([{ id: "page-1", name: "Page 1", tree: initialPage }]);
   const [currentPageId, setCurrentPageId] = useState("page-1");
   const [selectedId, setSelectedId] = useState(null);
-  const [newComponentType, setNewComponentType] = useState("Text");
 
   const componentTypes = [
     { label: "Container", value: "Container" },
@@ -95,6 +94,26 @@ export default function App() {
     updateCurrentPageTree(addRecursive(appJSON));
   };
 
+  const removeComponent = (nodeId) => {
+    const removeRecursive = (node) => {
+      if (node.id === nodeId) {
+        return null;
+      }
+      if (node.children) {
+        const newChildren = node.children
+          .map((c) => removeRecursive(c))
+          .filter(Boolean);
+        return { ...node, children: newChildren };
+      }
+      return node;
+    };
+    const updatedTree = removeRecursive(appJSON);
+    updateCurrentPageTree(updatedTree || appJSON);
+    if (selectedId === nodeId) {
+      setSelectedId(null);
+    }
+  };
+
   const handleAddClick = (type) => {
     const newId = `new-${Math.floor(Math.random() * 10000)}`;
     let newNode = {
@@ -134,6 +153,29 @@ export default function App() {
     addComponent(targetId, newNode);
   };
 
+  const addPage = () => {
+    const newPageId = `page-${pages.length + 1}`;
+    setPages([...pages, { id: newPageId, name: `Page ${pages.length + 1}`, tree: initialPage }]);
+    setCurrentPageId(newPageId);
+    setSelectedId(null);
+  };
+
+  const removePage = (pageId) => {
+    if (pages.length > 1) {
+      setPages((prev) => prev.filter((p) => p.id !== pageId));
+      if (currentPageId === pageId) {
+        setCurrentPageId(pages[0].id);
+      }
+    }
+  };
+
+  // Renommer une page
+  const renamePage = (pageId, newName) => {
+    setPages((prev) =>
+      prev.map((p) => (p.id === pageId ? { ...p, name: newName } : p))
+    );
+  };
+
   return (
     <div className="studio-container">
       {/* Barre supérieure */}
@@ -158,6 +200,9 @@ export default function App() {
         onSelectPage={setCurrentPageId}
         selectedId={selectedId}
         onSelectComponent={handleSelectComponent}
+        onAddPage={addPage}
+        onRenamePage={renamePage}
+        onRemovePage={removePage}
       />
 
       {/* Player */}
@@ -175,6 +220,7 @@ export default function App() {
       <SettingsPanel
         selectedNode={selectedNode}
         updateNodeProps={updateNodeProps}
+        removeComponent={removeComponent}
       />
     </div>
   );

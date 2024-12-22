@@ -22,7 +22,6 @@
     display: flex;
     background: white;
     border: 1px solid #ccc;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
   }
 
   .dropdown-item {
@@ -69,7 +68,6 @@
 }
 
 .studio-player-wrapper {
-  border: 1px solid #ddd;
   height: calc(100vh - 70px);
   /* Hauteur disponible après la barre du haut */
   overflow: auto;
