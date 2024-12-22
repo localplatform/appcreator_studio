@@ -1,0 +1,36 @@
+.studio-right-panel {
+    width: 30%;
+    border-left: 1px solid #ccc;
+    padding: 8px;
+    margin-top: 48px; // si on a la topbar en absolute
+  }
+  
+  .prop-block {
+    margin: 12px 0;
+  }
+  
+  .style-input {
+    display: flex;
+    align-items: center;
+    margin: 4px 0;
+  
+    label {
+      margin-right: 8px;
+      min-width: 120px;
+    }
+  
+    input,
+    select {
+      flex: 1;
+    }
+  }
+  
+  .delete-btn {
+    margin-top: 16px;
+    color: red;
+    border: 1px solid red;
+    background: #fff;
+    cursor: pointer;
+    padding: 4px 8px;
+  }
+  

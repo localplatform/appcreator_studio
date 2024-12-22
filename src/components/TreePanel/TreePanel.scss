@@ -1,0 +1,11 @@
+.tree-node {
+    margin-bottom: 4px;
+}
+
+.tree-item {
+    cursor: pointer;
+
+    &.selected {
+        font-weight: bold;
+    }
+}
