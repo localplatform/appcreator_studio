@@ -1,0 +1,74 @@
+.studio-container {
+    display: flex;
+    flex-direction: row;
+    height: 100vh;
+    font-family: sans-serif;
+  }
+  
+  /* Barre du haut */
+  .studio-topbar {
+    position: absolute; 
+    top: 0;
+    left: 0;
+    width: 100%;
+    padding: 8px;
+    background: #eee;
+    border-bottom: 1px solid #ccc;
+  }
+  
+  /* Panneau de gauche (arbre) */
+  .studio-left-panel {
+    width: 20%;
+    border-right: 1px solid #ccc;
+    padding: 8px;
+    margin-top: 48px; /* pour laisser de la place à la topbar */
+  }
+  
+  .studio-tree-node {
+    margin-bottom: 4px;
+  }
+  
+  .studio-tree-item {
+    cursor: pointer;
+  }
+  
+  .studio-tree-item.selected {
+    font-weight: bold;
+  }
+  
+  /* Panneau central (Player) */
+  .studio-center-panel {
+    width: 50%;
+    padding: 8px;
+    min-width: 400px;
+    margin-top: 48px;
+  }
+  
+  .studio-player-wrapper {
+    border: 1px solid #ddd;
+    height: 80vh;
+    overflow: auto;
+  }
+  
+  /* Panneau de droite (propriétés) */
+  .studio-right-panel {
+    width: 30%;
+    border-left: 1px solid #ccc;
+    padding: 8px;
+    margin-top: 48px;
+  }
+  
+  /* Blocs de propriétés */
+  .studio-prop-block {
+    margin: 8px 0;
+  }
+  
+  /* Bouton supprimer */
+  .delete-btn {
+    margin-top: 16px;
+    color: red;
+    border: 1px solid red;
+    background: #fff;
+    cursor: pointer;
+  }
+  
