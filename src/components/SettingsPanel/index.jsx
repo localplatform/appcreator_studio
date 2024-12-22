@@ -105,7 +105,7 @@ function SettingsPanel({ selectedNode, updateNodeProps, removeComponent }) {
                 <div className="prop-block-group">
                     {/* Flexbox-related styles */}
                     <div className="style-input">
-                        <label>justifyContent :</label>
+                        <label>Justify Content :</label>
                         <select
                             value={style.justifyContent || ""}
                             onChange={(e) =>
@@ -123,7 +123,7 @@ function SettingsPanel({ selectedNode, updateNodeProps, removeComponent }) {
                     </div>
 
                     <div className="style-input">
-                        <label>alignItems :</label>
+                        <label>Align Items :</label>
                         <select
                             value={style.alignItems || ""}
                             onChange={(e) => handleStyleChange("alignItems", e.target.value)}
@@ -138,7 +138,7 @@ function SettingsPanel({ selectedNode, updateNodeProps, removeComponent }) {
                     </div>
 
                     <div className="style-input">
-                        <label>flexDirection :</label>
+                        <label>Flex Direction :</label>
                         <select
                             value={style.flexDirection || ""}
                             onChange={(e) => handleStyleChange("flexDirection", e.target.value)}
@@ -152,7 +152,7 @@ function SettingsPanel({ selectedNode, updateNodeProps, removeComponent }) {
                     </div>
 
                     <StyleInput
-                        label="flexGrow"
+                        label="Flex Grow"
                         styleKey="flexGrow"
                         styleObj={style}
                         onChange={handleStyleChange}
@@ -162,7 +162,7 @@ function SettingsPanel({ selectedNode, updateNodeProps, removeComponent }) {
                 <div className="prop-block-group">
                     {/* Font-related styles */}
                     <div className="style-input">
-                        <label>fontWeight :</label>
+                        <label>Font Weight :</label>
                         <select
                             value={style.fontWeight || ""}
                             onChange={(e) => handleStyleChange("fontWeight", e.target.value)}
@@ -177,7 +177,7 @@ function SettingsPanel({ selectedNode, updateNodeProps, removeComponent }) {
                     </div>
 
                     <div className="style-input">
-                        <label>fontFamily :</label>
+                        <label>Font Family :</label>
                         <select
                             value={style.fontFamily || ""}
                             onChange={(e) => handleStyleChange("fontFamily", e.target.value)}
@@ -192,11 +192,18 @@ function SettingsPanel({ selectedNode, updateNodeProps, removeComponent }) {
                             <option value="Trebuchet MS">Trebuchet MS</option>
                         </select>
                     </div>
+
+                    <StyleInput
+                        label="Font Size"
+                        styleKey="fontSize"
+                        styleObj={style}
+                        onChange={handleStyleChange}
+                    />
                 </div>
 
                 {/* Border Radius */}
                 <div className="style-input">
-                    <label>borderRadius :</label>
+                    <label>Border Radius :</label>
                     <select
                         value={parseInt(style.borderRadius || "0", 10)}
                         onChange={(e) =>
@@ -214,22 +221,13 @@ function SettingsPanel({ selectedNode, updateNodeProps, removeComponent }) {
 
             <div className="prop-block-group">
                 {/* Other styles with +/- buttons */}
-                {["margin", "padding", "width", "height", "fontSize"].map((key) => (
-                    <div key={key} className="style-input">
-                        <label>{key} :</label>
-                        <button onClick={() => decrementPxValue(key)}>-</button>
-                        <input
-                            type="text"
-                            value={parseInt(style[key] || "0", 10)}
-                            onChange={(e) =>
-                                handleStyleChange(
-                                    key,
-                                    `${parseInt(e.target.value || "0", 10)}px`
-                                )
-                            }
-                        />
-                        <button onClick={() => incrementPxValue(key)}>+</button>
-                    </div>
+                {["margin", "padding", "width", "height"].map((key) => (
+                    <StyleInput
+                        label={key}
+                        styleKey={key}
+                        styleObj={style}
+                        onChange={handleStyleChange}
+                    />
                 ))}
             </div>
 
