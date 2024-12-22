@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import Player from "./components/Player";
 import SettingsPanel from "./components/SettingsPanel";
 import TreePanel from "./components/TreePanel";
@@ -40,36 +40,38 @@ const initialJSON = {
   ],
 };
 
-export default function Studio() {
+export default function App() {
   const [appJSON, setAppJSON] = useState(initialJSON);
+
+  // ID du composant sélectionné
   const [selectedId, setSelectedId] = useState(null);
+
+  // Type de composant qu'on veut ajouter
   const [newComponentType, setNewComponentType] = useState("Text");
 
-  /**
-   * Trouve récursivement un noeud dans l'arbre
-   */
+  // Trouve un node dans l'arbre
   const findNodeById = (node, id) => {
     if (node.id === id) return node;
     if (!node.children) return null;
     for (const child of node.children) {
-      const result = findNodeById(child, id);
-      if (result) return result;
+      const found = findNodeById(child, id);
+      if (found) return found;
     }
     return null;
   };
 
-  /**
-   * Sélection
-   */
+  // Sélection
   const handleSelectComponent = (id) => {
     setSelectedId(id);
   };
 
-  const selectedNode = selectedId ? findNodeById(appJSON, selectedId) : null;
+  // Node sélectionné
+  const selectedNode = useMemo(() => {
+    if (!selectedId) return null;
+    return findNodeById(appJSON, selectedId);
+  }, [appJSON, selectedId]);
 
-  /**
-   * Mettre à jour les props d'un noeud
-   */
+  // Met à jour les props
   const updateNodeProps = (nodeId, newProps) => {
     const updateRecursive = (node) => {
       if (node.id === nodeId) {
@@ -86,10 +88,7 @@ export default function Studio() {
     setAppJSON((prev) => updateRecursive(prev));
   };
 
-  /**
-   * Ajouter un composant
-   * => on met display:flex par défaut pour tout le monde
-   */
+  // Ajouter un composant (avec display:flex par défaut)
   const addComponent = (parentId, newNode) => {
     const addRecursive = (node) => {
       if (node.id === parentId) {
@@ -110,23 +109,20 @@ export default function Studio() {
     setAppJSON((prev) => addRecursive(prev));
   };
 
-  /**
-   * Supprimer un composant
-   */
+  // Supprimer
   const removeComponent = (nodeId) => {
     const removeRecursive = (node) => {
       if (node.id === nodeId) {
-        return null; // supprime
+        return null;
       }
       if (node.children) {
         const newChildren = node.children
-          .map((child) => removeRecursive(child))
+          .map((c) => removeRecursive(c))
           .filter(Boolean);
         return { ...node, children: newChildren };
       }
       return node;
     };
-
     setAppJSON((prev) => {
       const updated = removeRecursive(prev);
       return updated || prev;
@@ -136,23 +132,21 @@ export default function Studio() {
     }
   };
 
-  /**
-   * Clic sur "Ajouter"
-   * => on met display:flex par défaut dans tous les cas
-   */
+  // Clic sur "Ajouter"
   const handleAddClick = () => {
     const newId = `new-${Math.floor(Math.random() * 10000)}`;
+
     let newNode = {
       id: newId,
       type: newComponentType,
       props: {
         style: {
-          display: "flex", // <<--- Par défaut pour tous
+          display: "flex", // par défaut
         },
       },
     };
 
-    // Ajout de props particulières selon le type
+    // Props supplémentaires selon le type
     switch (newComponentType) {
       case "Container":
         newNode.props.style.flexDirection = "row";
@@ -172,7 +166,7 @@ export default function Studio() {
         break;
     }
 
-    // Cibler la racine ou le conteneur sélectionné
+    // L'ajouter sous le container sélectionné ou la racine
     let targetId = appJSON.id;
     if (selectedNode && selectedNode.type === "Container") {
       targetId = selectedNode.id;
@@ -198,7 +192,7 @@ export default function Studio() {
         <button onClick={handleAddClick}>Ajouter</button>
       </div>
 
-      {/* Panel gauche : Arbre */}
+      {/* Arbre de gauche */}
       <TreePanel
         appJSON={appJSON}
         selectedId={selectedId}
@@ -217,7 +211,7 @@ export default function Studio() {
         </div>
       </div>
 
-      {/* Panel de droite : Propriétés */}
+      {/* Panneau de droite : Propriétés */}
       <SettingsPanel
         selectedNode={selectedNode}
         updateNodeProps={updateNodeProps}
