@@ -1,32 +1,51 @@
 .studio-container {
   display: flex;
   height: 100vh;
-  overflow: hidden; /* Empêche le défilement global */
+  overflow: hidden;
+  /* Empêche le défilement global */
   font-family: sans-serif;
 }
 
-/* Barre du haut */
 .studio-topbar {
-  position: fixed; /* Positionnement fixe pour ne pas affecter la mise en page */
+  display: flex;
+  position: fixed;
   top: 0;
   left: 0;
   width: 100%;
-  height: 48px; /* Hauteur fixe */
-  padding: 8px;
   background: #eee;
   border-bottom: 1px solid #ccc;
-  display: flex;
+  z-index: 1000;
   align-items: center;
-  z-index: 1000; /* Assure que la barre reste au-dessus des autres éléments */
-  box-sizing: border-box; /* Inclut le padding dans la hauteur totale */
+  box-sizing: border-box;
+
+  .dropdown {
+    display: flex;
+    background: white;
+    border: 1px solid #ccc;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  }
+
+  .dropdown-item {
+    padding: 20px 50px;
+    cursor: pointer;
+    border-right: 1px solid #eee;
+
+    &:hover {
+      background: #f0f0f0;
+    }
+  }
+
+  .dropdown-item:last-child {
+    border-right: none;
+  }
 }
 
 /* Panneau de gauche */
 .studio-left-panel {
   width: 20%;
   border-right: 1px solid #ccc;
-  margin-top: 48px; /* Compense la hauteur de la barre du haut */
-  padding: 8px;
+  margin-top: 65px;
+  /* Compense la hauteur de la barre du haut */
   overflow-y: auto;
   box-sizing: border-box;
 }
@@ -43,14 +62,16 @@
 /* Player au centre */
 .studio-center-panel {
   width: 50%;
-  margin-top: 48px; /* Compense la hauteur de la barre du haut */
+  margin-top: 65px;
+  /* Compense la hauteur de la barre du haut */
   overflow-y: auto;
   box-sizing: border-box;
 }
 
 .studio-player-wrapper {
   border: 1px solid #ddd;
-  height: calc(100vh - 56px); /* Hauteur disponible après la barre du haut */
+  height: calc(100vh - 70px);
+  /* Hauteur disponible après la barre du haut */
   overflow: auto;
 }
 
@@ -58,8 +79,6 @@
 .studio-right-panel {
   width: 30%;
   border-left: 1px solid #ccc;
-  margin-top: 48px; /* Compense la hauteur de la barre du haut */
-  padding: 8px;
   overflow-y: auto;
   box-sizing: border-box;
 }

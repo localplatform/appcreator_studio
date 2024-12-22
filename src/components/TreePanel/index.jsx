@@ -43,11 +43,12 @@ export default function TreePanel({
 
   return (
     <div className="studio-left-panel">
-      <h4>Pages et Arbre</h4>
+      <h4>Arborecense</h4>
       {pages.map((page) => (
         <div
           key={page.id}
           className={`page-item ${page.id === currentPageId ? "selected-page" : ""}`}
+          onClick={() => onSelectPage(page.id)}
         >
           {/* En-tête de la page : Nom et bouton supprimer */}
           <div className="page-header">
@@ -66,7 +67,6 @@ export default function TreePanel({
               <div
                 className="page-name"
                 onDoubleClick={() => handleDoubleClick(page.id, page.name)}
-                onClick={() => onSelectPage(page.id)}
               >
                 {page.name}
               </div>
